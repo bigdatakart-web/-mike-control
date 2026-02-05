@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mike Control Panel</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--tg-theme-bg-color, #ffffff);
+color: var(--tg-theme-text-color, #000000);
+margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 15px;
+}
+.header { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+.label { font-size: 12px; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; }
+.button {
+padding: 18px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold;
+cursor: pointer; text-align: center; transition: transform 0.1s, opacity 0.2s;
+}
+.button:active { transform: scale(0.98); opacity: 0.9; }
+.btn-work { background-color: #007aff; color: white; }
+.btn-personal { background-color: #34c759; color: white; }
+.btn-danger { background-color: #ff3b30; color: white; margin-top: 10px; }
+.info-box {
+background-color: var(--tg-theme-secondary-bg-color, #f1f1f2);
+padding: 12px; border-radius: 10px; font-family: monospace; font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div class="header">Майк: Управление</div>
+
+<div class="label">Выбор режима</div>
+<button class="button btn-work" onclick="setContext('work')">💼 РАБОЧИЙ КОНТЕКСТ</button>
+<button class="button btn-personal" onclick="setContext('personal')">🏠 ЛИЧНЫЙ КОНТЕКСТ</button>
+
+<div class="label">Инфо</div>
+<div class="info-box">
+Модель: gpt-oss-120b<br>
+Статус: Онлайн
+</div>
+
+<div class="label">Опасная зона</div>
+<button class="button btn-danger" onclick="confirmReset()">🗑 СБРОСИТЬ ПАМЯТЬ</button>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+function setContext(type) {
+// Отправляем команду в чат от имени пользователя
+tg.sendData(JSON.stringify({command: '/context', value: type}));
+tg.close();
+}
+
+function confirmReset() {
+if(confirm("Очистить текущую историю диалога?")) {
+tg.sendData(JSON.stringify({command: '/clear'}));
+tg.close();
+}
+}
+</script>
+</body>
+</html>
