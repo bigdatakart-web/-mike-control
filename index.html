@@ -1,65 +1,148 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mike Control Panel</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+:root {
+--bg-color: #0f172a;
+--card-bg: rgba(30, 41, 59, 0.7);
+--accent-work: #3b82f6;
+--accent-personal: #10b981;
+--accent-danger: #ef4444;
+--text-main: #f8fafc;
+--text-dim: #94a3b8;
+}
+
 body {
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-background-color: var(--tg-theme-bg-color, #ffffff);
-color: var(--tg-theme-text-color, #000000);
-margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 15px;
+font-family: 'Inter', -apple-system, sans-serif;
+background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+color: var(--text-main);
+margin: 0;
+padding: 20px;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+gap: 20px;
+overflow: hidden;
 }
-.header { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-.label { font-size: 12px; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; }
+
+.header {
+text-align: center;
+margin-bottom: 10px;
+}
+
+.header h1 {
+font-size: 22px;
+margin: 0;
+background: linear-gradient(to right, #60a5fa, #a78bfa);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+
+.card {
+background: var(--card-bg);
+backdrop-filter: blur(12px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 20px;
+padding: 20px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.label {
+font-size: 11px;
+font-weight: 700;
+color: var(--text-dim);
+text-transform: uppercase;
+letter-spacing: 1.5px;
+margin-bottom: 4px;
+}
+
 .button {
-padding: 18px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold;
-cursor: pointer; text-align: center; transition: transform 0.1s, opacity 0.2s;
+padding: 16px;
+border-radius: 14px;
+border: none;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+color: white;
 }
-.button:active { transform: scale(0.98); opacity: 0.9; }
-.btn-work { background-color: #007aff; color: white; }
-.btn-personal { background-color: #34c759; color: white; }
-.btn-danger { background-color: #ff3b30; color: white; margin-top: 10px; }
-.info-box {
-background-color: var(--tg-theme-secondary-bg-color, #f1f1f2);
-padding: 12px; border-radius: 10px; font-family: monospace; font-size: 13px;
+
+.button:active { transform: scale(0.96); filter: brightness(1.2); }
+
+.btn-work { background: linear-gradient(135deg, #2563eb, #3b82f6); box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
+.btn-personal { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3); }
+.btn-danger { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); margin-top: 10px; }
+
+.status-tag {
+background: rgba(255, 255, 255, 0.05);
+padding: 8px 12px;
+border-radius: 10px;
+font-size: 13px;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
+
+.dot { height: 8px; width: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #10b981; margin-right: 6px; }
 </style>
 </head>
 <body>
-<div class="header">Майк: Управление</div>
-
-<div class="label">Выбор режима</div>
-<button class="button btn-work" onclick="setContext('work')">💼 РАБОЧИЙ КОНТЕКСТ</button>
-<button class="button btn-personal" onclick="setContext('personal')">🏠 ЛИЧНЫЙ КОНТЕКСТ</button>
-
-<div class="label">Инфо</div>
-<div class="info-box">
-Модель: gpt-oss-120b<br>
-Статус: Онлайн
+<div class="header">
+<h1>Майк: Ассистент</h1>
 </div>
 
-<div class="label">Опасная зона</div>
-<button class="button btn-danger" onclick="confirmReset()">🗑 СБРОСИТЬ ПАМЯТЬ</button>
+<div class="card">
+<div class="label">Выбор режима</div>
+<button class="button btn-work" onclick="setContext('work')">
+<span>💼</span> Рабочий контекст
+</button>
+<button class="button btn-personal" onclick="setContext('personal')">
+<span>🏠</span> Личный контекст
+</button>
+</div>
+
+<div class="card">
+<div class="label">Состояние системы</div>
+<div class="status-tag">
+<span>Статус</span>
+<span><span class="dot"></span> Online</span>
+</div>
+<div class="status-tag">
+<span>Модель</span>
+<span style="color: var(--accent-work)">Gemini 3 Flash</span>
+</div>
+</div>
+
+<button class="button btn-danger" onclick="confirmReset()">
+<span>🗑</span> Очистить историю сессии
+</button>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.expand();
 tg.ready();
+tg.setHeaderColor('#0f172a');
 
 function setContext(type) {
-// Отправляем команду в чат от имени пользователя
 tg.sendData(JSON.stringify({command: '/context', value: type}));
 tg.close();
 }
 
 function confirmReset() {
-if(confirm("Очистить текущую историю диалога?")) {
+if(confirm("Вы уверены? Это очистит текущий диалог.")) {
 tg.sendData(JSON.stringify({command: '/clear'}));
 tg.close();
-}
 }
 </script>
 </body>
